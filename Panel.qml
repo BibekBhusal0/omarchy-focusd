@@ -100,13 +100,22 @@ Panel {
     whichProcess.running = true
   }
 
+  readonly property string focusdVersion: "v0.2.0"
+  readonly property string focusdSha256: "13538979d894f5b8f665a0a392598a78e94078939fec478246329b37521a8595"
+  readonly property string focusdDownloadUrl:
+    "https://github.com/BibekBhusal0/focusd/releases/download/" + focusdVersion + "/focusd-linux-x86_64"
+
   function installCommand() {
     return "rm -f \"$XDG_RUNTIME_DIR/focusd-panel-install.failed\"; status=0; " +
       "mkdir -p \"$HOME/.local/bin\" && " +
-      "url=$(curl -fsSL https://api.github.com/repos/BibekBhusal0/focusd/releases/latest | " +
-      "jq -r '.assets[] | select(.name==\"focusd-linux-x86_64\") | .browser_download_url') && " +
-      "curl -fsSL \"$url\" -o \"$HOME/.local/bin/focusd\" && " +
-      "chmod +x \"$HOME/.local/bin/focusd\" " +
+      "tmp=$(mktemp) && " +
+      "curl -fsSL \"" + focusdDownloadUrl + "\" -o \"$tmp\" && " +
+      "actual=$(sha256sum \"$tmp\" | awk '{print $1}') && " +
+      "if [ \"$actual\" = \"" + focusdSha256 + "\" ]; then " +
+      "  mv \"$tmp\" \"$HOME/.local/bin/focusd\" && chmod +x \"$HOME/.local/bin/focusd\"; " +
+      "else " +
+      "  rm -f \"$tmp\"; status=1; " +
+      "fi " +
       "|| status=$?; " +
       "if (( status != 0 )); then printf '%s\\n' \"$status\" > \"$XDG_RUNTIME_DIR/focusd-panel-install.failed\"; fi; " +
       "(exit \"$status\")"
@@ -199,7 +208,7 @@ Panel {
             text: root.installing
               ? "Installing focusd…"
               : "Install focusd"
-            iconText: root.installing ? "" : "󰏔"
+            iconText: root.installing ? "" : "󰏔"
             iconSpinning: root.installing
             fontFamily: root.fontFamily
             fontSize: Style.font.body
@@ -515,9 +524,12 @@ Panel {
         root.installing = false
         installPoll.stop()
         installTimeout.stop()
-        root.installError = String(whichOutput.text || "").trim() === "130"
+        var exitStatus = String(whichOutput.text || "").trim()
+        root.installError = exitStatus === "130"
           ? "Installation was canceled."
-          : "Installation did not finish. Check the Omarchy terminal and try again."
+          : exitStatus === "1"
+            ? "Checksum verification failed. The download may be corrupted."
+            : "Installation did not finish. Check the Omarchy terminal and try again."
       } else {
         root.installError = ""
       }

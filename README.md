@@ -19,7 +19,7 @@ At the time of making this there are already two, similar plugin for omarchy in 
 ## Requirements
 
 - Omarchy quattro
-- [Focusd](https://github.com/BibekBhusal0/focusd) (auto-installed on first use)
+- [Focusd](https://github.com/BibekBhusal0/focusd) v0.2.0 (auto-installed on first use with SHA256 verification)
 
 ## Install
 
