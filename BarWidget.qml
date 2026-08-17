@@ -86,6 +86,8 @@ BarWidget {
 
     onPressed: function(buttonCode) {
       if (buttonCode === Qt.LeftButton) root.toggle()
+      else if (buttonCode === Qt.RightButton && root.timerService && !root.timerService.stopped) root.timerService.skip()
+      else if (buttonCode === Qt.MiddleButton && root.timerService && !root.timerService.stopped) root.timerService.stop()
     }
   }
 }

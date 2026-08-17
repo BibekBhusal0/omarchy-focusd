@@ -2,6 +2,8 @@
 
 A beautiful [Focusd](https://github.com/BibekBhusal0/focusd) pomodoro timer for the Omarchy bar. Shows the current session and remaining time with a state icon, and opens a control panel with pause, skip, and stop actions plus your streak, sessions, history, and daily goal.
 
+![Focusd Demo](demo.gif)
+
 ## Why Another Pomodoro Timer
 
 At the time of making this there are already two, similar plugin for omarchy in marketplace, but what does focusd do different than other plugins. First thing focusd is not just omarchy plugin, it's a TUI with features like streak, history, stats, and more. This plugin is just integration of omarchy with focusd. And to answer the question of how this differs from other plugin, focusd has TUI which is in-sync with bar, and other lovely features like goal, history, streak.
@@ -27,7 +29,7 @@ omarchy plugin add https://github.com/BibekBhusal0/omarchy-focusd.git --enable
 
 ## Usage
 
-Click the bar widget to open the control panel, or bind it to a key (`~/.config/hypr/bindings.lua`):
+Click the bar widget to open the control panel. Right-click skips to the next session, middle-click stops/resets the current timer. You can also bind it to a key (`~/.config/hypr/bindings.lua`):
 
 ```lua
 o.bind("CTRL", "T", "exec, omarchy-shell shell summon bibek.focusd")

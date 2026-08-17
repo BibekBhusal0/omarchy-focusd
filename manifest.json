@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "bibek.focusd",
   "name": "Focusd",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Bibek Bhusal",
   "description": "A pomodoro timer for the Omarchy bar with awesome features like streak, daily goal,sessions, stats and history.",
   "homepage": "https://github.com/BibekBhusal0/omarchy-focusd",

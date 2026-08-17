@@ -47,7 +47,7 @@ Panel {
 
   function actionCount() {
     if (!root.installed) return 1
-    return root.stopVisible ? 3 : 2
+    return (!!root.timerService && !root.timerService.stopped) ? 3 : 2
   }
 
   function selectAction(delta) {
@@ -329,7 +329,7 @@ Panel {
             iconSize: Style.font.iconLarge
             horizontalPadding: 0
             verticalPadding: 0
-            visible: root.stopVisible
+            visible: !!root.timerService && !root.timerService.stopped
             enabled: !!root.timerService && !root.timerService.stopped
             opacity: enabled ? 1 : 0.35
             hasCursor: root.cursorActive && root.selectedAction === 2
