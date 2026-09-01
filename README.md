@@ -11,15 +11,19 @@ At the time of making this there are already two, similar plugin for omarchy in 
 ## Features
 
 - Bar widget showing session state and remaining time
-- Control panel with pause, skip, and stop
+- Control panel with pause, skip, reset, and add 5 minutes
+- Session progress dots showing current position in the pomodoro cycle
+- Info page with links to GitHub, settings TUI, and stats TUI
+- Automatic update checking for AUR installations
 - Streak, daily goal, and sessions today from Focusd history
 - Customizable state icons
 - Switchable popup style (linear hero or circular face)
+- Full keyboard navigation support
 
 ## Requirements
 
 - Omarchy quattro
-- [Focusd](https://github.com/BibekBhusal0/focusd) v0.2.0 (auto-installed on first use with SHA256 verification)
+- [Focusd](https://github.com/BibekBhusal0/focusd) v0.2.1+ (auto-installed on first use with SHA256 verification, or install from AUR: `yay -S focusd`)
 
 ## Install
 
@@ -29,13 +33,13 @@ omarchy plugin add https://github.com/BibekBhusal0/omarchy-focusd.git --enable
 
 ## Usage
 
-Click the bar widget to open the control panel. Right-click skips to the next session, middle-click stops/resets the current timer. You can also bind it to a key (`~/.config/hypr/bindings.lua`):
+Click the bar widget to open the control panel. Right-click skips to the next session, middle-click resets the current timer. The info button (i icon) at the bottom opens settings and stats access. You can also bind it to a key (`~/.config/hypr/bindings.lua`):
 
 ```lua
 o.bind("CTRL", "T", "exec, omarchy-shell shell summon bibek.focusd")
 ```
 
-Start the timer with `focusd start`.
+Start the timer with `focusd start`. Press Escape in the info page to return to the timer page.
 
 ## Configuration
 
@@ -117,4 +121,16 @@ omarchy plugin remove bibek.focusd
 
 Bar widget and panel design adapted from [Omadoro](https://github.com/brianblakely/omadoro) by Brian Blakely, licensed under the MIT License.
 
+Session progress dots visualization inspired by [omarchy-pomodoro](https://github.com/rodrigojacarei/omarchy-pomodoro) by rodrigojacarei, licensed under the MIT License.
+
 This plugin is licensed under the [MIT License](LICENSE).
+
+## Others
+
+Here are my other Omarchy plugins:
+
+- [Obsidian Search](https://github.com/BibekBhusal0/omarchy-obsidian-search) - fuzzy-search your Obsidian vault
+- [Readest](https://github.com/BibekBhusal0/omarchy-readest) - fuzzy-search your Readest library
+- [yt-dlp](https://github.com/BibekBhusal0/omarchy-ytdl) - video downloads with progress and history
+
+Please give a star if you find them useful!
