@@ -342,46 +342,46 @@ Panel {
           source: "TimerPage.qml"
           onLoaded: {
             item.timerService = Qt.binding(function () {
-              return root.timerService;
-            });
+                return root.timerService;
+              });
             item.foreground = Qt.binding(function () {
-              return root.foreground;
-            });
+                return root.foreground;
+              });
             item.activeColor = Qt.binding(function () {
-              return root.activeColor;
-            });
+                return root.activeColor;
+              });
             item.fontFamily = Qt.binding(function () {
-              return root.fontFamily;
-            });
+                return root.fontFamily;
+              });
             item.progressBarStyle = Qt.binding(function () {
-              return root.progressBarStyle;
-            });
+                return root.progressBarStyle;
+              });
             item.updateAvailable = Qt.binding(function () {
-              return root.updateAvailable;
-            });
+                return root.updateAvailable;
+              });
             item.cursorActive = Qt.binding(function () {
-              return root.cursorActive;
-            });
+                return root.cursorActive;
+              });
             item.selectedAction = Qt.binding(function () {
-              return root.selectedAction;
-            });
+                return root.selectedAction;
+              });
             item.resetVisible = Qt.binding(function () {
-              return root.resetVisible;
-            });
+                return root.resetVisible;
+              });
             item.addTimeVisible = Qt.binding(function () {
-              return root.addTimeVisible;
-            });
+                return root.addTimeVisible;
+              });
             item.hasSessionData = Qt.binding(function () {
-              return root.timerService ? root.timerService.hasSessionData : false;
-            });
+                return root.timerService ? root.timerService.hasSessionData : false;
+              });
             item.totalActionCount = Qt.binding(function () {
-              return root.timerActionCount();
-            });
+                return root.timerActionCount();
+              });
             item.updateRequested.connect(root.updateFocusd);
             item.infoRequested.connect(function () {
-              root.currentPage = "info";
-              root.selectedAction = 0;
-            });
+                root.currentPage = "info";
+                root.selectedAction = 0;
+              });
             item.actionHovered.connect(root.actionHovered);
           }
         }
@@ -394,23 +394,23 @@ Panel {
           source: "InfoPage.qml"
           onLoaded: {
             item.timerService = Qt.binding(function () {
-              return root.timerService;
-            });
+                return root.timerService;
+              });
             item.foreground = Qt.binding(function () {
-              return root.foreground;
-            });
+                return root.foreground;
+              });
             item.activeColor = Qt.binding(function () {
-              return root.activeColor;
-            });
+                return root.activeColor;
+              });
             item.fontFamily = Qt.binding(function () {
-              return root.fontFamily;
-            });
+                return root.fontFamily;
+              });
             item.cursorActive = Qt.binding(function () {
-              return root.cursorActive;
-            });
+                return root.cursorActive;
+              });
             item.selectedAction = Qt.binding(function () {
-              return root.selectedAction;
-            });
+                return root.selectedAction;
+              });
             item.actionHovered.connect(root.actionHovered);
           }
         }

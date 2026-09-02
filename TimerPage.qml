@@ -483,7 +483,7 @@ Item {
     spacing: Style.space(8)
 
     Repeater {
-      model: timerService ? timerService.workSessionsBeforeLongBreak : 4
+      model: Math.max(1, Math.min(20, timerService ? timerService.workSessionsBeforeLongBreak : 4))
 
       Rectangle {
         required property int index

@@ -164,7 +164,7 @@ Item {
     root.dailyGoal = String(state.daily_goal || "");
     root.currentStreak = Number(state.current_streak) || 0;
     if (state.work_sessions_before_long_break !== undefined)
-      root.workSessionsBeforeLongBreak = Number(state.work_sessions_before_long_break) || 4;
+      root.workSessionsBeforeLongBreak = Math.max(1, Math.min(20, Number(state.work_sessions_before_long_break) || 4));
     if (state.completed_sessions !== undefined)
       root.completedSessions = Number(state.completed_sessions) || 0;
     root.hasSessionData = state.work_sessions_before_long_break !== undefined && state.completed_sessions !== undefined;
