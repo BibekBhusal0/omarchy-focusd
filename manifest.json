@@ -2,11 +2,14 @@
   "schemaVersion": 1,
   "id": "bibek.focusd",
   "name": "Focusd",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Bibek Bhusal",
   "description": "A pomodoro timer for the Omarchy bar with features like streak, daily goal, sessions, stats, history, and session progress visualization.",
   "homepage": "https://github.com/BibekBhusal0/omarchy-focusd",
-  "kinds": ["service", "bar-widget"],
+  "kinds": [
+    "service",
+    "bar-widget"
+  ],
   "entryPoints": {
     "service": "Service.qml",
     "barWidget": "BarWidget.qml"
@@ -33,7 +36,10 @@
         "key": "progressBarStyle",
         "type": "enum",
         "label": "Popup style",
-        "options": ["linear", "circular"],
+        "options": [
+          "linear",
+          "circular"
+        ],
         "defaultValue": "linear",
         "description": "Linear hero with progress bar, or circular timer face."
       },

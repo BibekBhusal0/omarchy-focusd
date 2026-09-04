@@ -120,7 +120,7 @@ Item {
           width: (parent.width - parent.spacing) / 2
           spacing: Style.spacing.labelGap
           InfoPair {
-            icon: ""
+            icon: ""
             label: "Streak"
             value: (root.timerService ? root.timerService.currentStreak : 0) + "d"
             foreground: root.foreground
@@ -139,7 +139,7 @@ Item {
           width: (parent.width - parent.spacing) / 2
           spacing: Style.spacing.labelGap
           InfoPair {
-            icon: ""
+            icon: ""
             label: "Sessions today"
             value: root.timerService ? String(root.timerService.sessionsToday) : "0"
             foreground: root.foreground
@@ -423,7 +423,7 @@ Item {
         color: foreground
         width: Math.max(progressTrack.height, progressTrack.width * (timerService ? timerService.progress : 0))
 
-        Behavior on width {
+        Behavior on width  {
           NumberAnimation {
             duration: 320
             easing.type: Easing.OutCubic
@@ -496,13 +496,13 @@ Item {
         radius: Style.space(4)
         color: isDone || (isCurrent && timerService && timerService.running) ? activeColor : Qt.rgba(foreground.r, foreground.g, foreground.b, 0.25)
 
-        Behavior on width {
+        Behavior on width  {
           NumberAnimation {
             duration: 150
             easing.type: Easing.OutCubic
           }
         }
-        Behavior on color {
+        Behavior on color  {
           ColorAnimation {
             duration: 150
           }

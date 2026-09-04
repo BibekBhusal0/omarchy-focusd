@@ -4,6 +4,8 @@ A beautiful [Focusd](https://github.com/BibekBhusal0/focusd) pomodoro timer for 
 
 ![Focusd Demo](demo.gif)
 
+![Focusd preview](preview.png)
+
 ## Why Another Pomodoro Timer
 
 At the time of making this there are already two, similar plugin for omarchy in marketplace, but what does focusd do different than other plugins. First thing focusd is not just omarchy plugin, it's a TUI with features like streak, history, stats, and more. This plugin is just integration of omarchy with focusd. And to answer the question of how this differs from other plugin, focusd has TUI which is in-sync with bar, and other lovely features like goal, history, streak.
@@ -131,6 +133,6 @@ Here are my other Omarchy plugins:
 
 - [Obsidian Search](https://github.com/BibekBhusal0/omarchy-obsidian-search) - fuzzy-search your Obsidian vault
 - [Readest](https://github.com/BibekBhusal0/omarchy-readest) - fuzzy-search your Readest library
-- [yt-dlp](https://github.com/BibekBhusal0/omarchy-ytdl) - video downloads with progress and history
+- [Youtube Video Downloader](https://github.com/BibekBhusal0/omarchy-ytdl) - video downloads with progress and history
 
 Please give a star if you find them useful!
