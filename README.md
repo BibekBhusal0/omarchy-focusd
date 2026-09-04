@@ -2,8 +2,6 @@
 
 A beautiful [Focusd](https://github.com/BibekBhusal0/focusd) pomodoro timer for the Omarchy bar. Shows the current session and remaining time with a state icon, and opens a control panel with pause, skip, and stop actions plus your streak, sessions, history, and daily goal.
 
-![Focusd Demo](demo.gif)
-
 ![Focusd preview](preview.png)
 
 ## Why Another Pomodoro Timer
@@ -32,6 +30,10 @@ At the time of making this there are already two, similar plugin for omarchy in 
 ```bash
 omarchy plugin add https://github.com/BibekBhusal0/omarchy-focusd.git --enable
 ```
+
+## Demo
+
+![Focusd Demo](demo.gif)
 
 ## Usage
 
