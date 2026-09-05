@@ -28,8 +28,7 @@ Panel {
   readonly property string installFailurePath: String(Quickshell.env("XDG_RUNTIME_DIR") || "") + "/focusd-panel-install.failed"
 
   property string currentPage: "timer"
-  property bool checkingUpdate: false
-  property bool updateAvailable: false
+  readonly property bool updateAvailable: root.timerService && root.timerService.versionChecked && root.timerService.focusdVersion !== "" ? root.timerService.compareVersions(root.pinnedVersion, root.timerService.focusdVersion) > 0 : false
 
   readonly property bool resetVisible: timerService ? timerService.active : false
   readonly property bool addTimeVisible: timerService ? (timerService.active && timerService.hasAddMinutesFeature) : false
@@ -51,8 +50,6 @@ Panel {
     cursorActive = true;
     controller.show();
     root.checkInstallation();
-    if (root.installed)
-      root.checkForUpdates();
   }
 
   function close() {
@@ -177,28 +174,6 @@ Panel {
     installerProcess.running = true;
     installPoll.restart();
     installTimeout.restart();
-  }
-
-  function checkForUpdates() {
-    if (!root.installed || root.checkingUpdate)
-      return;
-    root.checkingUpdate = true;
-    versionCheckProcess.command = ["focusd", "--version"];
-    versionCheckProcess.running = true;
-  }
-
-  function compareVersions(v1, v2) {
-    var parts1 = String(v1).replace(/^v/, "").split(".");
-    var parts2 = String(v2).replace(/^v/, "").split(".");
-    for (var i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-      var p1 = Number(parts1[i]) || 0;
-      var p2 = Number(parts2[i]) || 0;
-      if (p1 > p2)
-        return 1;
-      if (p1 < p2)
-        return -1;
-    }
-    return 0;
   }
 
   function updateFocusd() {
@@ -431,7 +406,6 @@ Panel {
         root.installing = false;
         installPoll.stop();
         installTimeout.stop();
-        Qt.callLater(root.checkForUpdates);
       } else if (exitCode === 2 && root.installing) {
         root.installing = false;
         installPoll.stop();
@@ -449,25 +423,6 @@ Panel {
   }
 
   Process {
-    id: versionCheckProcess
-    stdout: StdioCollector {
-      id: versionCheckOutput
-      waitForEnd: true
-    }
-    onExited: function (exitCode) {
-      root.checkingUpdate = false;
-      if (exitCode === 0) {
-        var output = String(versionCheckOutput.text || "").trim();
-        var match = output.match(/focusd\s+(\d+\.\d+\.\d+)/);
-        if (match && match[1]) {
-          var installedVersion = "v" + match[1];
-          root.updateAvailable = root.compareVersions(root.pinnedVersion, installedVersion) > 0;
-        }
-      }
-    }
-  }
-
-  Process {
     id: yayCheckProcess
     stdout: SplitParser {
       onRead: function (data) {}
@@ -482,8 +437,10 @@ Panel {
     stdout: SplitParser {
       onRead: function (data) {
         var msg = String(data || "").trim();
-        if (msg === "updated")
-          root.checkForUpdates();
+        if (msg === "updated" && root.timerService) {
+          root.timerService.versionChecked = false;
+          root.timerService.checkVersion();
+        }
         else if (msg.indexOf("needs_sudo") === 0) {
           var tmpPath = msg.split(" ")[1];
           var sudoCmd = "INSTALLED_PATH=$(which focusd) && " + "sudo mv \"" + tmpPath + "\" \"$INSTALLED_PATH\" && sudo chmod +x \"$INSTALLED_PATH\" && " + "focusd --stop-daemon && focusd -d && echo 'Done! Press Enter to close.' && read";

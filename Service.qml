@@ -16,7 +16,7 @@ Item {
   property real progress: 0
   property string tooltipText: ""
 
-  property bool installed: true
+  property bool installed: false
 
   property int sessionsToday: 0
   property string focusedToday: "0s"
@@ -126,6 +126,11 @@ Item {
     stateProc.running = true;
   }
 
+  function parseVersion(output) {
+    var match = String(output || "").match(/(?:focusd\s+)?v?(\d+\.\d+\.\d+)/i);
+    return match && match[1] ? match[1] : "";
+  }
+
   function checkVersion() {
     if (!root.versionChecked && !versionProc.running) {
       versionProc.running = false;
@@ -205,6 +210,7 @@ Item {
       root.installed = exitCode === 0;
       if (exitCode === 0 && String(stateProc.collected).trim() !== "") {
         root.parseState(stateProc.collected);
+        root.checkVersion();
       } else {
         root.status = "stopped";
       }
@@ -221,10 +227,9 @@ Item {
     }
     onExited: function (exitCode) {
       if (exitCode === 0) {
-        var output = String(versionProc.collected || "").trim();
-        var match = output.match(/focusd\s+(\d+\.\d+\.\d+)/);
-        if (match && match[1]) {
-          root.focusdVersion = match[1];
+        var parsed = root.parseVersion(versionProc.collected);
+        if (parsed !== "") {
+          root.focusdVersion = parsed;
           root.versionChecked = true;
         }
       }
