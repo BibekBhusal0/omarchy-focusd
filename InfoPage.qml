@@ -84,7 +84,7 @@ Column {
       onHovered: function (value) {
         root.actionHovered(1, value);
       }
-      onClicked: Quickshell.execDetached(["focusd", "settings"])
+      onClicked: Quickshell.execDetached(["omarchy-launch-tui", "focusd", "settings"])
     }
 
     Button {
@@ -100,7 +100,7 @@ Column {
       onHovered: function (value) {
         root.actionHovered(2, value);
       }
-      onClicked: Quickshell.execDetached(["focusd", "stats"])
+      onClicked: Quickshell.execDetached(["omarchy-launch-tui", "focusd", "stats"])
     }
   }
 
