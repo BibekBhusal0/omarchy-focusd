@@ -54,15 +54,29 @@ Item {
   readonly property string barText: root.icon + (root.remainingText !== "" ? " " + root.remainingText : "")
   readonly property string barTooltip: root.tooltipText !== "" ? root.tooltipText : root.sessionLabel + " · " + root.remainingText
 
-  function configure(settings) {
+  function configure() {
     var merged = defaultIcons();
-    if (settings) {
-      var custom = settings.icons || settings["format-icons"] || {};
-      for (var key in custom)
-        if (custom[key] !== undefined)
-          merged[key] = String(custom[key]);
-    }
+    var custom = (root.fileConfig && root.fileConfig.icons) || {};
+    for (var key in custom)
+      if (custom[key] !== undefined)
+        merged[key] = String(custom[key]);
     icons = merged;
+  }
+  property var fileConfig: ({})
+  function parseFileConfig(raw) {
+    try {
+      var parsed = JSON.parse(String(raw || ""));
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : ({});
+    } catch (e) { return ({}); }
+  }
+  FileView {
+    id: configFile
+    path: Quickshell.env("HOME") + "/.config/omarchy/focusd.json"
+    watchChanges: true
+    printErrors: false
+    onLoaded: { root.fileConfig = root.parseFileConfig(text()); root.configure(); }
+    onFileChanged: configFile.reload()
+    onLoadFailed: { root.fileConfig = ({}); root.configure(); }
   }
 
   function iconFor(key) {

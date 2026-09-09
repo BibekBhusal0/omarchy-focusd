@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "bibek.focusd",
   "name": "Focusd",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": "Bibek Bhusal",
   "description": "A pomodoro timer for the Omarchy bar with features like streak, daily goal, sessions, stats, history, and session progress visualization.",
   "homepage": "https://github.com/BibekBhusal0/omarchy-focusd",
@@ -30,49 +30,6 @@
         "long-break": "󰒲",
         "long-break-paused": "󰏤"
       }
-    },
-    "schema": [
-      {
-        "key": "progressBarStyle",
-        "type": "enum",
-        "label": "Popup style",
-        "options": [
-          "linear",
-          "circular"
-        ],
-        "defaultValue": "linear",
-        "description": "Linear hero with progress bar, or circular timer face."
-      },
-      {
-        "key": "icons.work",
-        "type": "string",
-        "label": "Work icon"
-      },
-      {
-        "key": "icons.work-paused",
-        "type": "string",
-        "label": "Work paused icon"
-      },
-      {
-        "key": "icons.short-break",
-        "type": "string",
-        "label": "Short break icon"
-      },
-      {
-        "key": "icons.short-break-paused",
-        "type": "string",
-        "label": "Short break paused icon"
-      },
-      {
-        "key": "icons.long-break",
-        "type": "string",
-        "label": "Long break icon"
-      },
-      {
-        "key": "icons.long-break-paused",
-        "type": "string",
-        "label": "Long break paused icon"
-      }
-    ]
+    }
   }
 }

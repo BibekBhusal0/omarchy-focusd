@@ -17,7 +17,23 @@ Panel {
   readonly property color foreground: Color.popups.text
   readonly property color activeColor: Color.accent
   readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family
-  readonly property string progressBarStyle: setting("progressBarStyle", "linear")
+  readonly property string progressBarStyle: root.fileConfig.progressBarStyle || "linear"
+  property var fileConfig: ({})
+  FileView {
+    id: configFile
+    path: Quickshell.env("HOME") + "/.config/omarchy/focusd.json"
+    watchChanges: true
+    printErrors: false
+    onLoaded: root.fileConfig = root.parseFileConfig(text())
+    onFileChanged: configFile.reload()
+    onLoadFailed: root.fileConfig = ({})
+  }
+  function parseFileConfig(raw) {
+    try {
+      var parsed = JSON.parse(String(raw || ""));
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : ({});
+    } catch (e) { return ({}); }
+  }
   property int selectedAction: 0
   property bool cursorActive: true
 
@@ -440,8 +456,7 @@ Panel {
         if (msg === "updated" && root.timerService) {
           root.timerService.versionChecked = false;
           root.timerService.checkVersion();
-        }
-        else if (msg.indexOf("needs_sudo") === 0) {
+        } else if (msg.indexOf("needs_sudo") === 0) {
           var tmpPath = msg.split(" ")[1];
           var sudoCmd = "INSTALLED_PATH=$(which focusd) && " + "sudo mv \"" + tmpPath + "\" \"$INSTALLED_PATH\" && sudo chmod +x \"$INSTALLED_PATH\" && " + "focusd --stop-daemon && focusd -d && echo 'Done! Press Enter to close.' && read";
           Quickshell.execDetached(["omarchy", "launch", "floating", "terminal", "with", "presentation", "sh", "-c", sudoCmd]);

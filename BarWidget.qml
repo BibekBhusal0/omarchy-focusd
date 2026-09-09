@@ -33,7 +33,7 @@ BarWidget {
 
   function syncService() {
     if (timerService && typeof timerService.configure === "function")
-      timerService.configure(settings);
+      timerService.configure();
     injectPanel();
   }
 
