@@ -2,11 +2,12 @@ import QtQuick
 import Quickshell
 import qs.Commons
 import qs.Ui
+import "shared" as FocusdShared
 
 BarWidget {
   id: root
 
-  readonly property var timerService: bar && bar.shell ? bar.shell.serviceFor(moduleName) : null
+  readonly property var timerService: (bar && bar.shell ? bar.shell.serviceFor(moduleName) : null) || FocusdShared.ServiceBridge.service
   readonly property bool opened: panelLoader.item ? panelLoader.item.opened === true : false
   readonly property bool popoutSwitchClosing: panelLoader.item ? panelLoader.item.popoutSwitchClosing === true : false
   readonly property real openPanelIndicatorWidth: button.labelWidth

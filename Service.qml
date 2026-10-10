@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import "shared" as FocusdShared
 
 Item {
   id: root
@@ -67,16 +68,113 @@ Item {
     try {
       var parsed = JSON.parse(String(raw || ""));
       return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : ({});
-    } catch (e) { return ({}); }
+    } catch (e) {
+      return ({});
+    }
   }
-  FileView {
-    id: configFile
-    path: Quickshell.env("HOME") + "/.config/omarchy/focusd.json"
-    watchChanges: true
-    printErrors: false
-    onLoaded: { root.fileConfig = root.parseFileConfig(text()); root.configure(); }
-    onFileChanged: configFile.reload()
-    onLoadFailed: { root.fileConfig = ({}); root.configure(); }
+  property int maxConfigBytes: 65536
+  property int configTimeoutMs: 5000
+  readonly property string readScriptPath: Qt.resolvedUrl("read-config").toString().replace(/^file:\/\//, "")
+  property string configRaw: ""
+  property bool configApplied: false
+
+  function killProc(proc) {
+    try {
+      proc.signal(9);
+    } catch (e) {
+    }
+    proc.running = false;
+  }
+
+  function loadConfig() {
+    if (configProc.running)
+      return;
+    configProc.collected = "";
+    configProc.collectedBytes = 0;
+    configProc.overflowed = false;
+    configProc.timedOut = false;
+    configProc.command = [root.readScriptPath, Quickshell.env("HOME") + "/.config/omarchy/focusd.json", String(root.maxConfigBytes)];
+    configWatchdog.restart();
+    configProc.running = true;
+  }
+
+  function applyConfig(ok, raw) {
+    var next = ok ? String(raw || "") : "";
+    if (next === root.configRaw && root.configApplied)
+      return;
+    root.configRaw = next;
+    root.configApplied = true;
+    root.fileConfig = root.parseFileConfig(next);
+    root.configure();
+  }
+
+  Timer {
+    id: configWatchdog
+    interval: root.configTimeoutMs
+    repeat: false
+    onTriggered: {
+      if (configProc.running) {
+        configProc.timedOut = true;
+        configProc.collected = "";
+        configProc.collectedBytes = 0;
+        root.killProc(configProc);
+      }
+    }
+  }
+
+  Timer {
+    id: configPoll
+    interval: 10000
+    repeat: true
+    running: true
+    onTriggered: root.loadConfig()
+  }
+
+  Process {
+    id: configProc
+    property string collected: ""
+    property int collectedBytes: 0
+    property bool overflowed: false
+    property bool timedOut: false
+    stdout: SplitParser {
+      onRead: function (data) {
+        if (configProc.overflowed || configProc.timedOut)
+          return;
+        var chunk = String(data + "\n");
+        if (configProc.collectedBytes + chunk.length > root.maxConfigBytes) {
+          configProc.overflowed = true;
+          configProc.collected = "";
+          configProc.collectedBytes = 0;
+          root.killProc(configProc);
+          return;
+        }
+        configProc.collected += chunk;
+        configProc.collectedBytes += chunk.length;
+      }
+    }
+    stderr: SplitParser {
+      onRead: function (data) {
+        if (configProc.overflowed || configProc.timedOut)
+          return;
+        configProc.collectedBytes += String(data + "\n").length;
+        if (configProc.collectedBytes > root.maxConfigBytes) {
+          configProc.overflowed = true;
+          configProc.collected = "";
+          configProc.collectedBytes = 0;
+          root.killProc(configProc);
+        }
+      }
+    }
+    onExited: function (exitCode) {
+      configWatchdog.stop();
+      var ok = !configProc.overflowed && !configProc.timedOut && exitCode === 0;
+      var output = String(configProc.collected);
+      configProc.collected = "";
+      configProc.collectedBytes = 0;
+      configProc.overflowed = false;
+      configProc.timedOut = false;
+      root.applyConfig(ok, output);
+    }
   }
 
   function iconFor(key) {
@@ -251,7 +349,13 @@ Item {
   }
 
   Component.onCompleted: {
+    FocusdShared.ServiceBridge.service = root;
     root.poll();
     root.checkVersion();
+    root.loadConfig();
+  }
+  Component.onDestruction: {
+    if (FocusdShared.ServiceBridge.service === root)
+      FocusdShared.ServiceBridge.service = null;
   }
 }
