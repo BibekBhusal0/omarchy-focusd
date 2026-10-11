@@ -271,8 +271,8 @@ Panel {
     whichProcess.running = true;
   }
 
-  readonly property string pinnedVersion: "v0.2.13"
-  readonly property string focusdSha256: "5a058eaaacf80222a3c76e55ea7a78b784b30707f4d60fdfaa1d4e63c1ab7aa1"
+  readonly property string pinnedVersion: "v0.2.14"
+  readonly property string focusdSha256: "5a653d879e9c63e0490d85a7825d471ee31acddbfe36267f9b5179e668c32f33"
   readonly property string focusdDownloadUrl: "https://github.com/BibekBhusal0/focusd/releases/download/" + pinnedVersion + "/focusd-linux-x86_64"
 
   function installCommand() {
